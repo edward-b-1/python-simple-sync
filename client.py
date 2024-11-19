@@ -2,8 +2,6 @@
 
 import socket
 import ssl
-import base64
-import math
 
 from cryptography.fernet import Fernet
 
@@ -12,6 +10,10 @@ from lib.constants import default_port
 
 
 def main():
+
+    target_directory = './example-target-directory'
+    directory_list = lib.get_directory_list(target_directory)
+    print(directory_list)
 
     generated_key = Fernet.generate_key()
     print(f'Example generated key: {generated_key}')
