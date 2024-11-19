@@ -17,3 +17,6 @@ def get_fernet_key_from_password(password: str) -> bytes:
         raise RuntimeError(f'password input {password} too short')
 
     return base64_key
+
+
+def get_directory_list(target_directory: str) -> list[str]:
