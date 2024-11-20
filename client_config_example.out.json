@@ -1,0 +1,5 @@
+{
+    "port": 12346,
+    "ping_delay_seconds": 1,
+    "data_directory": "not_used"
+}

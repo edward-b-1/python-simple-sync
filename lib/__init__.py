@@ -36,10 +36,10 @@ def get_directory_list(target_directory: str) -> list[str]:
 
 
 def calculate_file_hash(file_path: str) -> bytes:
-    hashlib.sha256()
-
     with open(file_path, "rb") as ifile:
         #digest = hashlib.file_digest(ifile, "sha256")
         #sha256sum = hashlib.file_digest(ifile, 'sha256').hexdigest()
         sha256sum = hashlib.sha256(ifile.read()).hexdigest()
+        return sha256sum
+    
 
