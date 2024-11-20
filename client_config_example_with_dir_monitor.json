@@ -2,7 +2,7 @@
     "port": 12346,
     "ping_delay_seconds": 1,
     "data_directory": "not_used",
-    "config_monitor_dirs": [
+    "monitor_target": [
         {
             "name": "example1",
             "path": "/home/edward/example1"
