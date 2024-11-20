@@ -1,4 +1,5 @@
-default_port = 2024
+DEFAULT_PORT = 2024
+DEFAULT_CONTROL_PORT = 2025
 
 APPLICATION_NAME = 'python-simple-sync'
 APPLICATION_NAME_DIR = 'python_simple_sync'

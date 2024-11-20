@@ -2,6 +2,7 @@
 import io
 import base64
 import hashlib
+import os
 #import math
 
 
@@ -31,8 +32,22 @@ def get_fernet_key_from_password_2(password: str) -> bytes:
 #     return base64_key
 
 
-def get_directory_list(target_directory: str) -> list[str]:
-    pass
+def get_directory_list(target_directory: str) -> list[(str, str)]:
+    path = target_directory
+
+    if os.path.isfile(path):
+        return [(path, 'f')]
+
+    elif os.path.isdir(path):
+        items = [(path, 'd')]
+        # TODO: map
+        for item in os.listdir(path):
+            full_path = os.path.join(path, item)
+            more_items = get_directory_list(full_path)
+            items.extend(more_items)
+        return items
+
+    return []
 
 
 def calculate_file_hash(file_path: str) -> bytes:

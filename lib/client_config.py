@@ -32,6 +32,7 @@ def _get_default_client_config() -> dict:
         'port': 12346,
         'ping_delay_seconds': 1,
         'data_directory': 'not_used',
+        'monitor_targets': [],
     }
     return client_config
 
@@ -41,3 +42,7 @@ def create_default_client_config() -> None:
     client_config = _get_default_client_config()
     client_config_default_path = _get_client_config_default_path()
     _save_client_config_impl(client_config_default_path, client_config)
+
+def get_monitor_targets(config:dict):
+    return config['monitor_targets']
+
