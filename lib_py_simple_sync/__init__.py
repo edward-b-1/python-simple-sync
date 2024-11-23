@@ -32,29 +32,22 @@ def get_fernet_key_from_password_2(password: str) -> bytes:
 #     return base64_key
 
 
-def get_directory_list(target_directory: str) -> list[(str, str)]:
-    path = target_directory
 
-    if os.path.isfile(path):
-        return [(path, 'f')]
 
-    elif os.path.isdir(path):
-        items = [(path, 'd')]
-        # TODO: map
-        for item in os.listdir(path):
-            full_path = os.path.join(path, item)
-            more_items = get_directory_list(full_path)
-            items.extend(more_items)
-        return items
-
-    return []
 
 
 def calculate_file_hash(file_path: str) -> bytes:
-    with open(file_path, "rb") as ifile:
+    with open(file_path, 'rb') as ifile:
         #digest = hashlib.file_digest(ifile, "sha256")
         #sha256sum = hashlib.file_digest(ifile, 'sha256').hexdigest()
         sha256sum = hashlib.sha256(ifile.read()).hexdigest()
         return sha256sum
-    
 
+
+def calculate_sha256sum(
+    file_path: str,
+) -> str|None:
+    with open(file_path, 'rb') as ifile:
+        sha256sum = hashlib.file_digest(ifile, 'sha256').hexdigest()
+        return sha256sum
+    return None
