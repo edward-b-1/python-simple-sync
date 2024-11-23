@@ -121,28 +121,28 @@ def _fast_scandir_3_impl_convert_paths_to_path_tuples(paths:list[str]) -> list[t
     )
 
 
-# def _fast_scandir_3_impl_convert_path_tuples_to_fully_qualified_path_tuples(
-#     path_tuples:list[tuple[str, str]],
-# ) -> list[tuple[str, str]]:
-#     return (
-#         list(
-#             map(
-#                 lambda path_tuple: (path_tuple[0], os.path.abspath(path_tuple[1])),
-#                 path_tuples,
-#             )
-#         )
-#     )
+def _fast_scandir_3_impl_convert_path_tuples_to_fully_qualified_path_tuples(
+    path_tuples:list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    return (
+        list(
+            map(
+                lambda path_tuple: (path_tuple[0], os.path.abspath(path_tuple[1])),
+                path_tuples,
+            )
+        )
+    )
 
 
-# def _fast_scandir_3_impl_sort_path_tuples(
-#     path_tuples:list[tuple[str, str]],
-# ) -> list[tuple[str, str]]:
-#     return (
-#         sorted(
-#             path_tuples,
-#             key=lambda path_tuple: path_tuple[1],
-#         )
-#     )
+def _fast_scandir_3_impl_sort_path_tuples(
+    path_tuples:list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    return (
+        sorted(
+            path_tuples,
+            key=lambda path_tuple: path_tuple[1],
+        )
+    )
 
 
 def fast_scandir_3(target:str) -> list[tuple[str, str]]:
@@ -154,17 +154,16 @@ def fast_scandir_3(target:str) -> list[tuple[str, str]]:
     # convert paths to tuple depending on type
     path_tuples = _fast_scandir_3_impl_convert_paths_to_path_tuples(paths)
 
-    # # convert paths to fully qualified paths
-    # fully_qualified_path_tuples = (
-    #     _fast_scandir_3_impl_convert_path_tuples_to_fully_qualified_path_tuples(
-    #         path_tuples,
-    #     )
-    # )
+    # convert paths to fully qualified paths
+    fully_qualified_path_tuples = (
+        _fast_scandir_3_impl_convert_path_tuples_to_fully_qualified_path_tuples(
+            path_tuples,
+        )
+    )
 
-    # # sort by fully qualified path
-    # sorted_fully_qualified_path_tuples = (
-    #     _fast_scandir_3_impl_sort_path_tuples(fully_qualified_path_tuples)
-    # )
+    # sort by fully qualified path
+    sorted_fully_qualified_path_tuples = (
+        _fast_scandir_3_impl_sort_path_tuples(fully_qualified_path_tuples)
+    )
 
-    # return sorted_fully_qualified_path_tuples
-    return path_tuples
+    return sorted_fully_qualified_path_tuples
