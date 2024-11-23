@@ -1,6 +1,8 @@
 
 
 import os
+from functools import reduce
+
 
 """Return all (relative) directory paths found in `target_dir`.
 `target_dir` must be a directory. Does not work if the target
@@ -29,30 +31,104 @@ def fast_scandir_2(target_dir: str) -> list[str]:
     return items
 
 
-def _fast_scandir_3_impl_get_paths_recursive(target: str) -> list[str]:
+
+
+
+
+def _fast_scandir_3_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
+    items:list[tuple[str, str]] = []
+    if os.path.isfile(target[1]):
+        item = ('f', target)
+        items.append(item)
+    elif os.path.isdir(target[1]):
+        item = ('d', target)
+        items.append(item)
+        for subtarget in os.listdir(target):
+            items.extend(_fast_scandir_3_impl(subtarget))
+    return items
+
+def _fast_scandir_3_fully_qualified_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
+    return (
+        list(
+            map(
+                lambda item: (item[0], os.path.abspath(item[1])),
+                _fast_scandir_3_impl(target),
+            )
+        )
+    )
+
+def _fast_scandir_3_fully_qualified_sorted_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
+    return sorted(_fast_scandir_3_fully_qualified_impl(target), key=lambda pair: pair[1])
+
+
+
+
+def _fast_scandir_3_impl_get_paths_recursive_for_loop(target: str) -> list[str]:
     items:list[str] = []
     if os.path.isfile(target):
         items.append(target)
     elif os.path.isdir(target):
         items.append(target)
-        # joined_items = list(
-        #         map(
-        #             lambda item: os.path.join(target, item),
-        #             os.listdir(target),
-        #         )
-        # )
-        # print('joined_items')
-        # print(joined_items)
-        # items.extend(
-        #     map(
-        #         _fast_scandir_3_impl_get_paths_recursive,
-        #         joined_items
-        #     )
-        # )
         for item in os.listdir(target):
            item = os.path.join(target, item)
            more_items = _fast_scandir_3_impl_get_paths_recursive(item)
            items.extend(more_items)
+    return items
+
+
+def _fast_scandir_3_impl_get_paths_recursive(target: str) -> list[str]:
+    assert isinstance(target, str), f'target is not str: {target}, {type(target)}'
+
+    def do_join(item):
+        print('do_join')
+        print(type(item))
+        t = os.path.join(target, item)
+        print(f't={t}')
+        return t
+
+    def do(item):
+        print('do')
+        print(type(item))
+        tmp = _fast_scandir_3_impl_get_paths_recursive(item)
+        print(f't={tmp}')
+        return tmp
+
+    print(f'target={target}')
+    items:list[str] = []
+    if os.path.isfile(target):
+        items.append(target)
+    elif os.path.isdir(target):
+        items.append(target)
+
+        joined_items = list(
+            map(
+                lambda item: os.path.join(target, item),
+                os.listdir(target),
+            )
+        )
+        print('joined_items')
+        print(joined_items)
+
+        new_items = (
+            reduce(
+                list.extend,
+                map(
+                    lambda item: do(item),
+                    map(
+                        lambda item: do_join(item),
+                        os.listdir(target),
+                    )
+                ),
+                []
+            )
+        )
+
+        print('new_items:')
+        print(new_items)
+
+        items.extend(
+            new_items
+        )
     return items
 
 
@@ -97,35 +173,12 @@ def _fast_scandir_3_impl_sort_path_tuples(
     )
 
 
-def _fast_scandir_3_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
-    items:list[tuple[str, str]] = []
-    if os.path.isfile(target[1]):
-        item = ('f', target)
-        items.append(item)
-    elif os.path.isdir(target[1]):
-        item = ('d', target)
-        items.append(item)
-        for subtarget in os.listdir(target):
-            items.extend(_fast_scandir_3_impl(subtarget))
-    return items
-
-def _fast_scandir_3_fully_qualified_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
-    return (
-        list(
-            map(
-                lambda item: (item[0], os.path.abspath(item[1])),
-                _fast_scandir_3_impl(target),
-            )
-        )
-    )
-
-def _fast_scandir_3_fully_qualified_sorted_impl(target:tuple[str, str]) -> list[tuple[str, str]]:
-    return sorted(_fast_scandir_3_fully_qualified_impl(target), key=lambda pair: pair[1])
-
 def fast_scandir_3(target:str) -> list[tuple[str, str]]:
 
     # get all paths
     paths = _fast_scandir_3_impl_get_paths_recursive(target)
+    for item in paths:
+        print(item)
 
     # convert paths to tuple depending on type
     path_tuples = _fast_scandir_3_impl_convert_paths_to_path_tuples(paths)
