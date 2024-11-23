@@ -1,5 +1,6 @@
 
 import os
+import operator
 from functools import reduce
 
 
@@ -16,91 +17,27 @@ def _fast_scandir_3_impl_get_paths_recursive_for_loop(target: str) -> list[str]:
     return items
 
 
-def _fast_scandir_3_impl_get_paths_recursive_old(target: str) -> list[str]:
-    assert isinstance(target, str), f'target is not str: {target}, {type(target)}'
-
-    def do_join(item):
-        print('do_join')
-        print(type(item))
-        t = os.path.join(target, item)
-        print(f't={t}')
-        return t
-
-    def do(item):
-        print('do')
-        print(type(item))
-        tmp = _fast_scandir_3_impl_get_paths_recursive(item)
-        print(f't={tmp}')
-        return tmp
-
-    print(f'target={target}')
-    items:list[str] = []
-    if os.path.isfile(target):
-        items.append(target)
-    elif os.path.isdir(target):
-        items.append(target)
-
-        joined_items = list(
-            map(
-                lambda item: os.path.join(target, item),
-                os.listdir(target),
-            )
-        )
-        print('joined_items')
-        print(joined_items)
-
-        new_items = (
-            reduce(
-                list.extend,
-                map(
-                    lambda item: do(item),
-                    map(
-                        lambda item: do_join(item),
-                        os.listdir(target),
-                    )
-                ),
-                []
-            )
-        )
-
-        print('new_items:')
-        print(new_items)
-
-        items.extend(
-            new_items
-        )
-    return items
-
-
 def _fast_scandir_3_impl_get_paths_recursive(target: str) -> list[str]:
     assert isinstance(target, str), f'target is not str: {target}, {type(target)}'
 
-    print(f'target={target}')
-
     items:list[str] = []
     if os.path.isfile(target):
         items.append(target)
     elif os.path.isdir(target):
         items.append(target)
-
-        ld = os.listdir(target)
-        print(f'ld={ld}')
-
-        new_items = (
-            list(
+        items.extend(
+            reduce(
+                operator.add,
                 map(
-                    lambda item: _fast_scandir_3_impl_get_paths_recursive(os.path.join(target, item)),
-                    ld,
-                )
+                    _fast_scandir_3_impl_get_paths_recursive,
+                    map(
+                        lambda item: os.path.join(target, item),
+                        os.listdir(target),
+                    )
+                ),
+                [],
             )
         )
-
-        print(f'new_items={new_items}')
-
-        items.extend(
-            new_items
-        )
-    print(f'return items={items}')
     return items
 
 
