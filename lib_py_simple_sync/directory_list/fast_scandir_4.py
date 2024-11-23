@@ -1,7 +1,6 @@
 
-import os
-import operator
 from pathlib import Path
+
 
 def _fast_scandir_4_impl(target: str) -> tuple[list[str], list[str]]:
     files: list[str] = []

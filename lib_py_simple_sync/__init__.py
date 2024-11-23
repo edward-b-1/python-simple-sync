@@ -35,7 +35,7 @@ def get_fernet_key_from_password_2(password: str) -> bytes:
 
 
 
-
+# TODO: move to `hash_functions`
 def calculate_file_hash(file_path: str) -> bytes:
     with open(file_path, 'rb') as ifile:
         #digest = hashlib.file_digest(ifile, "sha256")
@@ -44,6 +44,7 @@ def calculate_file_hash(file_path: str) -> bytes:
         return sha256sum
 
 
+# TODO: move to `hash_functions`
 def calculate_sha256sum(
     file_path: str,
 ) -> str|None:
