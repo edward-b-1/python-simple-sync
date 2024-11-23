@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
 from sqlalchemy import create_engine
+from sqlalchemy import Engine
 
 
 class Base(DeclarativeBase):
@@ -21,7 +22,6 @@ class MonitoredTarget(Base):
 
     def __repr__(self) -> str:
         return f"MonitoredTarget(id={self.id!r}, name={self.name!r}, path={self.path!r}, md5={self.md5!r}, sha256={self.sha256!r})"
-
 
 
 def create_database(engine:Engine) -> None:

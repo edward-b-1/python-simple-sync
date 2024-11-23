@@ -3,7 +3,7 @@
 import socket
 import ssl
 
-from lib.constants import DEFAULT_PORT
+from lib_py_simple_sync.constants import DEFAULT_PORT
 
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 context.load_cert_chain('server.crt', 'server.key')

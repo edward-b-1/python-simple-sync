@@ -6,7 +6,7 @@ import pathlib
 from .json_config import save_json_config
 from .json_config import load_json_config
 
-from lib.filesystem import get_linux_config_dir
+from lib_py_simple_sync.filesystem import get_linux_config_dir
 
 DEFAULT_CLIENT_CONFIG_FILENAME = 'client_config.json'
 
@@ -18,7 +18,7 @@ def load_client_config() -> dict:
 
 def _save_client_config_impl(path:str, config:dict) -> None:
     save_json_config(path, config)
-    
+
 def _load_client_config_impl(path: str) -> dict:
     return load_json_config(path)
 
